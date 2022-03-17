@@ -1,0 +1,8 @@
+[Unit]
+Description=Incremental backup of btrfs subvolumes
+
+[Service]
+Nice=19
+IOSchedulingClass=idle
+KillSignal=SIGINT
+ExecStart=/usr/local/bin/bincbup
