@@ -4,14 +4,14 @@ mod utils;
 
 use std::ffi::OsString;
 use std::path::PathBuf;
+use std::sync::OnceLock;
 
 use clap::Parser;
-use once_cell::sync::OnceCell;
 
 use crate::backup::Backup;
 use crate::mount::Mount;
 
-static DRY_RUN: OnceCell<bool> = OnceCell::new();
+static DRY_RUN: OnceLock<bool> = OnceLock::new();
 
 #[derive(Parser, Debug)]
 #[clap(version, about)]

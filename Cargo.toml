@@ -2,7 +2,7 @@
 name = "bincbup"
 description = "Btrfs INCremental BackUP - backup subvolumes incrementally"
 authors = ["Dror Levin <dror@psybear.com>"]
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 repository = "https://github.com/drrlvn/bincbup"
 readme = "README.md"
@@ -11,6 +11,5 @@ keywords = ["btrfs", "backup", "snapshot"]
 categories = ["command-line-utilities", "filesystem"]
 
 [dependencies]
-anyhow = "1.0"
-clap = { version = "3.1", features = ["derive"] }
-once_cell = "1.10"
+anyhow = "1.0.71"
+clap = { version = "4.3.0", features = ["derive"] }
