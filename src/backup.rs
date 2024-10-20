@@ -13,7 +13,7 @@ struct Subvolume {
 }
 
 impl Subvolume {
-    fn finalize(self: &mut Self) -> anyhow::Result<()> {
+    fn finalize(&mut self) -> anyhow::Result<()> {
         let mut cmd = Command::new("btrfs");
         cmd.args(["subvolume", "delete"]);
         cmd.arg(&self.base);
@@ -42,7 +42,7 @@ enum State {
 }
 
 impl State {
-    fn finalize(self: &mut Self) -> anyhow::Result<()> {
+    fn finalize(&mut self) -> anyhow::Result<()> {
         match self {
             Self::Failed(_) => Ok(()),
             Self::InProgress { source, target } => {
@@ -52,7 +52,7 @@ impl State {
         }
     }
 
-    fn replicate(self: &mut Self) -> anyhow::Result<()> {
+    fn replicate(&mut self) -> anyhow::Result<()> {
         match &self {
             State::Failed(_) => Ok(()),
             State::InProgress { source, target, .. } => {
@@ -133,19 +133,18 @@ impl Backup {
         }
     }
 
-    fn exec(self: &mut Self, cmd: Command) {
+    fn exec(&mut self, cmd: Command) {
         match &self.state {
             State::Failed(_) => (),
             State::InProgress { .. } => {
                 if let Err(err) = crate::utils::exec(cmd) {
                     self.state = State::Failed(err);
-                    return;
                 }
             }
         }
     }
 
-    pub fn prepare(self: &mut Self) {
+    pub fn prepare(&mut self) {
         match &self.state {
             State::Failed(_) => (),
             State::InProgress { source, .. } => {
@@ -158,19 +157,19 @@ impl Backup {
         }
     }
 
-    pub fn replicate(self: &mut Self) {
+    pub fn replicate(&mut self) {
         if let Err(err) = self.state.replicate() {
             self.state = State::Failed(err);
         }
     }
 
-    pub fn finalize(self: &mut Self) {
+    pub fn finalize(&mut self) {
         if let Err(err) = self.state.finalize() {
             self.state = State::Failed(err);
         }
     }
 
-    pub fn print_summary(self: Self) -> bool {
+    pub fn print_summary(self) -> bool {
         print!("Backup {}: ", self.name.to_string_lossy());
         let success = match &self.state {
             State::Failed(err) => {
